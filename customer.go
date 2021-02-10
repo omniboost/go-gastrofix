@@ -44,7 +44,7 @@ type Customer struct {
 	GLNDelivery              string               `json:"GLNDelivery"`               // Global Location Delivery Number
 	InvoiceAdministrationFee string               `json:"InvoiceAdministrationFee"`  // Predefined invoice administration fee for the customer.
 	InvoiceDiscount          float64              `json:"InvoiceDiscount"`           // Predefined invoice discount for the customer.
-	InvoiceFreight           float64              `json:"InvoiceFreight"`            // Predefined invoice freight fee for the customer.
+	InvoiceFreight           string               `json:"InvoiceFreight"`            // Predefined invoice freight fee for the customer.
 	InvoiceRemark            string               `json:"InvoiceRemark"`             // Predefined invoice remark for the customer.
 	Name                     string               `json:"Name"`                      // Name of the customer.
 	OrganisationNumber       string               `json:"OrganisationNumber"`        // Organisation number of the customer. It needs to be a valid organisation numer.
