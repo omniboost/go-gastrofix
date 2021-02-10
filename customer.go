@@ -42,7 +42,7 @@ type Customer struct {
 	Fax                      string               `json:"Fax"`                       // Fax number for the customer.
 	GLN                      string               `json:"GLN"`                       // Global Location Number of the customer
 	GLNDelivery              string               `json:"GLNDelivery"`               // Global Location Delivery Number
-	InvoiceAdministrationFee float64              `json:"InvoiceAdministrationFee"`  // Predefined invoice administration fee for the customer.
+	InvoiceAdministrationFee string               `json:"InvoiceAdministrationFee"`  // Predefined invoice administration fee for the customer.
 	InvoiceDiscount          float64              `json:"InvoiceDiscount"`           // Predefined invoice discount for the customer.
 	InvoiceFreight           float64              `json:"InvoiceFreight"`            // Predefined invoice freight fee for the customer.
 	InvoiceRemark            string               `json:"InvoiceRemark"`             // Predefined invoice remark for the customer.
