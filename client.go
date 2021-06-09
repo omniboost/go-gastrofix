@@ -15,6 +15,7 @@ import (
 	"strings"
 	"sync"
 	"text/template"
+	"time"
 
 	"github.com/omniboost/go-fortnox/utils"
 )
@@ -32,6 +33,8 @@ var (
 		Host:   "api.fortnox.se",
 		Path:   "/3",
 	}
+	requestTimestamps = make(map[string]*timestamps)
+	requestsPerSecond = 4
 )
 
 // NewClient returns a new Exact Globe Client client
@@ -106,6 +109,9 @@ func (c Client) AccessToken() string {
 
 func (c *Client) SetAccessToken(accessToken string) {
 	c.accessToken = accessToken
+	if requestTimestamps[accessToken] == nil {
+		requestTimestamps[accessToken] = &timestamps{}
+	}
 }
 
 func (c Client) BaseURL() url.URL {
@@ -210,10 +216,15 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 		log.Println(string(dump))
 	}
 
+	c.SleepUntilRequestRate()
+
 	httpResp, err := c.http.Do(req)
 	if err != nil {
 		return nil, err
 	}
+
+	// register timestamp after request has a response
+	c.RegisterRequestTimestamp(time.Now())
 
 	if c.onRequestCompleted != nil {
 		c.onRequestCompleted(req, httpResp)
@@ -267,6 +278,36 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 	// }
 
 	return httpResp, nil
+}
+
+func (c *Client) RegisterRequestTimestamp(t time.Time) {
+	if len(*requestTimestamps[c.accessToken]) >= requestsPerSecond {
+		ts := (*requestTimestamps[c.accessToken])[1:requestsPerSecond]
+		requestTimestamps[c.accessToken] = &ts
+	}
+	ts := append(*requestTimestamps[c.accessToken], t)
+	requestTimestamps[c.accessToken] = &ts
+}
+
+func (c *Client) SleepUntilRequestRate() {
+	// Requestrate is 4r/1s
+
+	// if there are less then 4 registered requests: execute the request
+	// immediately
+	if len(*requestTimestamps[c.accessToken]) < (requestsPerSecond - 1) {
+		return
+	}
+
+	// is the first item within 1 second? If it's > 1 second the request can be
+	// executed imediately
+	diff := time.Now().Sub((*requestTimestamps[c.accessToken])[0])
+	if diff >= time.Second {
+		return
+	}
+
+	// Sleep for the time it takes for the first item to be > 1 second old
+	// + 1ms to be sure :)
+	time.Sleep(time.Second - diff + (1 * time.Millisecond))
 }
 
 func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
@@ -411,3 +452,5 @@ func checkContentType(response *http.Response) error {
 type PathParams interface {
 	Params() map[string]string
 }
+
+type timestamps []time.Time
