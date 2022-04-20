@@ -38,7 +38,7 @@ var (
 )
 
 // NewClient returns a new Exact Globe Client client
-func NewClient(httpClient *http.Client, clientSecret string, accessToken string) *Client {
+func NewClient(httpClient *http.Client) *Client {
 	if httpClient == nil {
 		httpClient = http.DefaultClient
 	}
@@ -46,8 +46,8 @@ func NewClient(httpClient *http.Client, clientSecret string, accessToken string)
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetClientSecret(clientSecret)
-	client.SetAccessToken(accessToken)
+	client.SetClientSecret("")
+	client.SetAccessToken("")
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -201,8 +201,11 @@ func (c *Client) NewRequest(ctx context.Context, method string, URL url.URL, bod
 	req.Header.Add("Content-Type", fmt.Sprintf("%s; charset=%s", c.MediaType(), c.Charset()))
 	req.Header.Add("Accept", c.MediaType())
 	req.Header.Add("User-Agent", c.UserAgent())
-	req.Header.Add("Client-Secret", c.ClientSecret())
-	req.Header.Add("Access-Token", c.AccessToken())
+
+	if c.AccessToken() != "" && c.ClientSecret() != "" {
+		req.Header.Add("Client-Secret", c.ClientSecret())
+		req.Header.Add("Access-Token", c.AccessToken())
+	}
 
 	return req, nil
 }
