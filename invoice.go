@@ -136,7 +136,7 @@ type InvoiceRow struct {
 	ArticleNumber       string  `json:"ArticleNumber"`                 // Article number.
 	ContributionPercent string  `json:"ContributionPercent,omitempty"` // Contribution Percent.
 	ContributionValue   string  `json:"ContributionValue,omitempty"`   // Contribution Value.
-	CostCenter          string  `json:"CostCenter"`                    // Code of the cost center for the row. The code must be of an existing cost center.
+	CostCenter          int     `json:"CostCenter"`                    // Code of the cost center for the row. The code must be of an existing cost center.
 	DeliveredQuantity   string  `json:"DeliveredQuantity"`             // Delivered quantity.
 	Description         string  `json:"Description"`                   // Row description.
 	Discount            float64 `json:"Discount"`                      // Discount amount.
