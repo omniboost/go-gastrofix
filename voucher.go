@@ -5,7 +5,7 @@ type Vouchers []Voucher
 type Voucher struct {
 	URL             string        `json:"@url,omitempty"`            // Direct URL to the record.
 	Comments        string        `json:"Comments"`                  // Comments of the voucher.
-	CostCenter      int           `json:"CostCenter"`                // Code of the cost center. The code must be of an existing cost center.
+	CostCenter      int           `json:"CostCenter,omitempty"`      // Code of the cost center. The code must be of an existing cost center.
 	Description     string        `json:"Description"`               // Description of the voucher.
 	Project         string        `json:"Project"`                   // Code of the project. The code must be of an existing project.
 	ReferenceNumber string        `json:"ReferenceNumber,omitempty"` // Reference number, for example an invoice number.
@@ -22,7 +22,7 @@ type VoucherRows []VoucherRow
 
 type VoucherRow struct {
 	Account                int     `json:"Account"`                // Account number. The number must be of an existing active account.
-	CostCenter             int     `json:"CostCenter"`             // Code of the cost center. The code must be of an existing cost center.
+	CostCenter             int     `json:"CostCenter,omitempty"`   // Code of the cost center. The code must be of an existing cost center.
 	Credit                 float64 `json:"Credit"`                 // Amount of credit.
 	Description            string  `json:"Description"`            // The description of the account.
 	Debit                  float64 `json:"Debit"`                  // Amount of debit.
