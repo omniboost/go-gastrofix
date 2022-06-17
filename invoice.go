@@ -27,7 +27,7 @@ type Invoice struct {
 	ContributionPercent       float64           `json:"ContributionPercent,omitempty"`    // Invoice contribution in percent.
 	ContributionValue         float64           `json:"ContributionValue,omitempty"`      // Invoice contribution in amount.
 	Country                   string            `json:"Country"`                          // Country for the invoice address. Must be a name of an existing country.
-	CostCenter                int               `json:"CostCenter,omitempty"`             // Code of the cost center. The code must be of an existing cost center.
+	CostCenter                string            `json:"CostCenter,omitempty"`             // Code of the cost center. The code must be of an existing cost center.
 	Currency                  string            `json:"Currency"`                         // Code of the currency. The code must be of an existing currency.
 	CurrencyRate              Number            `json:"CurrencyRate"`                     // Currency rate used for the invoice.
 	CurrencyUnit              float64           `json:"CurrencyUnit"`                     // Currency unit used for the invoice.
@@ -136,7 +136,7 @@ type InvoiceRow struct {
 	ArticleNumber       string  `json:"ArticleNumber"`                 // Article number.
 	ContributionPercent string  `json:"ContributionPercent,omitempty"` // Contribution Percent.
 	ContributionValue   string  `json:"ContributionValue,omitempty"`   // Contribution Value.
-	CostCenter          int     `json:"CostCenter,omitempty"`          // Code of the cost center for the row. The code must be of an existing cost center.
+	CostCenter          string  `json:"CostCenter,omitempty"`          // Code of the cost center for the row. The code must be of an existing cost center.
 	DeliveredQuantity   string  `json:"DeliveredQuantity"`             // Delivered quantity.
 	Description         string  `json:"Description"`                   // Row description.
 	Discount            float64 `json:"Discount"`                      // Discount amount.
