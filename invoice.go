@@ -23,7 +23,7 @@ type Invoice struct {
 	CreditInvoiceReference    string            `json:"CreditInvoiceReference,omitempty"` // Reference to the credit invoice, if one exits. The reference must be a document number for an existing credit invoice.
 	City                      string            `json:"City,omitempty"`                   // City for the invoice address.
 	Comments                  string            `json:"Comments"`                         // Comments of the invoice
-	ContractReference         int               `json:"ContractReference,omitempty"`      // Reference to the contract, if one exists.
+	ContractReference         string            `json:"ContractReference,omitempty"`      // Reference to the contract, if one exists.
 	ContributionPercent       float64           `json:"ContributionPercent,omitempty"`    // Invoice contribution in percent.
 	ContributionValue         float64           `json:"ContributionValue,omitempty"`      // Invoice contribution in amount.
 	Country                   string            `json:"Country"`                          // Country for the invoice address. Must be a name of an existing country.
@@ -65,8 +65,8 @@ type Invoice struct {
 	NotCompleted              bool              `json:"NotCompleted"`                 // If the invoice is set as not completed.
 	NoxFinans                 null.Bool         `json:"NoxFinans,omitempty"`          // If the invoice is managed by NoxFinans
 	OCR                       string            `json:"OCR"`                          // OCR number of the invoice.
-	OfferReference            int               `json:"OfferReference,omitempty"`     // Reference to the offer, if one exists.
-	OrderReference            int               `json:"OrderReference,omitempty"`     // Reference to the order, if one exists.
+	OfferReference            string            `json:"OfferReference,omitempty"`     // Reference to the offer, if one exists.
+	OrderReference            string            `json:"OrderReference,omitempty"`     // Reference to the order, if one exists.
 	OrganisationNumber        string            `json:"OrganisationNumber,omitempty"` // Organisation number of the customer for the invoice.
 	OurReference              string            `json:"OurReference"`                 // Our reference.
 	PaymentWay                PaymentWay        `json:"PaymentWay,omitempty"`         // CASH, CARD, AG
