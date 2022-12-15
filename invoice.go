@@ -20,7 +20,7 @@ type Invoice struct {
 	Booked                    null.Bool         `json:"Booked"`                           // If the invoice is bookkept. This value can be changed by using the action “bookkeep”.
 	Cancelled                 null.Bool         `json:"Cancelled,omitempty"`              // If the invoice is cancelled. This value can be changed by using the action “cancel”.
 	Credit                    string            `json:"Credit,omitempty"`                 // If the invoice is a credit invoice.
-	CreditInvoiceReference    int               `json:"CreditInvoiceReference,omitempty"` // Reference to the credit invoice, if one exits. The reference must be a document number for an existing credit invoice.
+	CreditInvoiceReference    string            `json:"CreditInvoiceReference,omitempty"` // Reference to the credit invoice, if one exits. The reference must be a document number for an existing credit invoice.
 	City                      string            `json:"City,omitempty"`                   // City for the invoice address.
 	Comments                  string            `json:"Comments"`                         // Comments of the invoice
 	ContractReference         int               `json:"ContractReference,omitempty"`      // Reference to the contract, if one exists.
