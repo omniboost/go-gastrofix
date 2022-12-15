@@ -55,7 +55,7 @@ type Invoice struct {
 	InvoiceDate               Date              `json:"InvoiceDate"`                      // Invoice date. Must be a valid date according to our date format.
 	InvoicePeriodStart        Date              `json:"InvoicePeriodStart,omitempty"`     // Start date of the invoice period, only applicable for contract invoices.
 	InvoicePeriodEnd          Date              `json:"InvoicePeriodEnd,omitempty"`       // End date of the invoice period, only applicable for contract invoices.
-	InvoiceReference          int               `json:"InvoiceReference,omitempty"`
+	InvoiceReference          string            `json:"InvoiceReference,omitempty"`
 	InvoiceRows               InvoiceRows       `json:"InvoiceRows"`                  // The properties for the object in this array is listed in the table “Invoice Rows”.
 	InvoiceType               InvoiceType       `json:"InvoiceType"`                  // The type of invoice. Can be INVOICE AGREEMENTINVOICE INTRESTINVOICE SUMMARYINVOICE or CASHINVOICE.
 	Labels                    Labels            `json:"Labels"`                       // The properties for the object in this array is listed in the table “Labels”
