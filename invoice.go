@@ -83,7 +83,7 @@ type Invoice struct {
 	Sent                      null.Bool         `json:"Sent,omitempty"`         // If the document is printed or sent in any way.
 	TaxReduction              int               `json:"TaxReduction,omitempty"` // The amount of tax reduction.
 	TermsOfDelivery           string            `json:"TermsOfDelivery"`        // Code of the terms of delivery. The code must be of an existing terms of delivery.
-	TermsOfPayment            int               `json:"TermsOfPayment"`         // Code of the terms of payment. The code must be of an existing terms of payment.
+	TermsOfPayment            string            `json:"TermsOfPayment"`         // Code of the terms of payment. The code must be of an existing terms of payment.
 	Total                     float64           `json:"Total,omitempty"`        // The total amount of the invoice.
 	TotalVAT                  float64           `json:"TotalVAT,omitempty"`     // The total VAT amount of the invoice.
 	TotalToPay                int               `json:"TotalToPay,omitempty"`
