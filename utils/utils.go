@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"fmt"
 	"net/http"
 	"net/url"
 	"reflect"
@@ -10,6 +11,23 @@ import (
 	null "gopkg.in/guregu/null.v3"
 
 	"github.com/gorilla/schema"
+)
+
+var (
+	// register custom encoders
+	EncodeSchemaMarshaler = func(v reflect.Value) string {
+		marshaler, ok := v.Interface().(SchemaMarshaler)
+		if ok == true {
+			return marshaler.MarshalSchema()
+		}
+
+		stringer, ok := v.Interface().(fmt.Stringer)
+		if ok == true {
+			return stringer.String()
+		}
+
+		return ""
+	}
 )
 
 type SchemaMarshaler interface {
@@ -61,33 +79,12 @@ func AddURLValuesToRequest(params url.Values, req *http.Request, skipEmpty bool)
 
 	// force $ in query parameters
 	req.URL.RawQuery = strings.Replace(req.URL.RawQuery, "%24", "$", -1)
+	// req.URL.RawQuery = strings.Replace(req.URL.RawQuery, "+", "%20", -1)
 	return nil
 }
 
 func NewSchemaEncoder() *schema.Encoder {
 	encoder := schema.NewEncoder()
-
-	// register custom encoders
-	// encodeSchemaMarshaler := func(v reflect.Value) string {
-	// 	marshaler, ok := v.Interface().(SchemaMarshaler)
-	// 	if ok == true {
-	// 		return marshaler.MarshalSchema()
-	// 	}
-
-	// 	stringer, ok := v.Interface().(fmt.Stringer)
-	// 	if ok == true {
-	// 		return stringer.String()
-	// 	}
-
-	// 	return ""
-	// }
-
-	// encoder.RegisterEncoder(&odata.Expand{}, encodeSchemaMarshaler)
-	// encoder.RegisterEncoder(&odata.Filter{}, encodeSchemaMarshaler)
-	// encoder.RegisterEncoder(&odata.Select{}, encodeSchemaMarshaler)
-	// encoder.RegisterEncoder(&odata.Top{}, encodeSchemaMarshaler)
-	// encoder.RegisterEncoder(&odata.OrderBy{}, encodeSchemaMarshaler)
-	// encoder.RegisterEncoder(&odata.Skip{}, encodeSchemaMarshaler)
 
 	encodeNullFloat := func(v reflect.Value) string {
 		nullFloat, _ := v.Interface().(null.Float)
@@ -105,7 +102,6 @@ func NewSchemaEncoder() *schema.Encoder {
 		return strconv.FormatBool(nullBool.Bool)
 	}
 
-	// encoder.RegisterEncoder(Date{}, encodeSchemaMarshaler)
 	encoder.RegisterEncoder(null.Float{}, encodeNullFloat)
 	encoder.RegisterEncoder(null.Bool{}, encodeNullBool)
 	return encoder

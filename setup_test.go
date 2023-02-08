@@ -51,7 +51,7 @@ func TestMain(m *testing.M) {
 		client = fortnox.NewClient(httpClient)
 	} else {
 		// setup old auth client
-		client = fortnox.NewClient(nil, clientSecret, accessToken)
+		client = fortnox.NewClient(nil)
 		client.SetClientSecret(clientSecret)
 		client.SetAccessToken(accessToken)
 	}

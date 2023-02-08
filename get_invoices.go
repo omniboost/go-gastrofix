@@ -36,10 +36,14 @@ func (r GetInvoicesRequest) NewGetInvoicesQueryParams() *GetInvoicesQueryParams 
 }
 
 type GetInvoicesQueryParams struct {
+	FromDate Date `schema:"fromdate"`
+	ToDate   Date `schema:"todate"`
 }
 
 func (p GetInvoicesQueryParams) ToURLValues() (url.Values, error) {
 	encoder := utils.NewSchemaEncoder()
+	encoder.RegisterEncoder(Date{}, utils.EncodeSchemaMarshaler)
+	encoder.RegisterEncoder(DateTime{}, utils.EncodeSchemaMarshaler)
 	params := url.Values{}
 
 	err := encoder.Encode(p, params)
