@@ -1,4 +1,4 @@
-module github.com/omniboost/go-fortnox
+module github.com/omniboost/go-gastrofix
 
 require (
 	github.com/golang/protobuf v1.5.2 // indirect

@@ -4,7 +4,7 @@ import (
 	"net/http"
 	"net/url"
 
-	"github.com/omniboost/go-fortnox/utils"
+	"github.com/omniboost/go-gastrofix/utils"
 )
 
 func (c *Client) NewGetCustomerRequest() GetCustomerRequest {

@@ -17,12 +17,12 @@ import (
 	"text/template"
 	"time"
 
-	"github.com/omniboost/go-fortnox/utils"
+	"github.com/omniboost/go-gastrofix/utils"
 )
 
 const (
 	libraryVersion = "0.0.1"
-	userAgent      = "go-fortnox/" + libraryVersion
+	userAgent      = "go-gastrofix/" + libraryVersion
 	mediaType      = "application/json"
 	charset        = "utf-8"
 )

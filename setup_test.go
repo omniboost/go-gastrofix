@@ -6,7 +6,7 @@ import (
 	"os"
 	"testing"
 
-	fortnox "github.com/omniboost/go-fortnox"
+	fortnox "github.com/omniboost/go-gastrofix"
 	"golang.org/x/oauth2"
 )
 

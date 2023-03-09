@@ -6,7 +6,7 @@ import (
 	"testing"
 	"time"
 
-	fortnox "github.com/omniboost/go-fortnox"
+	fortnox "github.com/omniboost/go-gastrofix"
 )
 
 func TestPostVoucher(t *testing.T) {

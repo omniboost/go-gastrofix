@@ -1,6 +1,6 @@
 package fortnox
 
-import "github.com/omniboost/go-fortnox/utils"
+import "github.com/omniboost/go-gastrofix/utils"
 
 type Accounts []Account
 

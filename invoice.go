@@ -1,7 +1,7 @@
 package fortnox
 
 import (
-	"github.com/omniboost/go-fortnox/utils"
+	"github.com/omniboost/go-gastrofix/utils"
 	"gopkg.in/guregu/null.v3"
 )
 
