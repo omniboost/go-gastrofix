@@ -1,4 +1,4 @@
-package fortnox_test
+package gastrofix_test
 
 import (
 	"encoding/json"
@@ -6,8 +6,9 @@ import (
 	"testing"
 )
 
-func TestGetPredefinedVoucherSeries(t *testing.T) {
-	req := client.NewGetPredefinedVoucherSeriesRequest()
+func TestTransactionsGet(t *testing.T) {
+	req := client.NewTransactionsGetRequest()
+	req.PathParams().PeriodID = 17
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

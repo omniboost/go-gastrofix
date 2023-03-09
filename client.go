@@ -1,4 +1,4 @@
-package fortnox
+package gastrofix
 
 import (
 	"bytes"
@@ -12,6 +12,7 @@ import (
 	"net/http"
 	"net/http/httputil"
 	"net/url"
+	"path"
 	"strings"
 	"sync"
 	"text/template"
@@ -30,8 +31,8 @@ const (
 var (
 	BaseURL = url.URL{
 		Scheme: "https",
-		Host:   "api.fortnox.se",
-		Path:   "/3",
+		Host:   "gastrofix.com",
+		Path:   "",
 	}
 	requestTimestamps = make(map[string]*timestamps)
 	requestsPerSecond = 4
@@ -46,8 +47,8 @@ func NewClient(httpClient *http.Client) *Client {
 	client := &Client{}
 
 	client.SetHTTPClient(httpClient)
-	client.SetClientSecret("")
-	client.SetAccessToken("")
+	client.SetBusinessID("")
+	client.SetToken("")
 	client.SetBaseURL(BaseURL)
 	client.SetDebug(false)
 	client.SetUserAgent(userAgent)
@@ -66,8 +67,8 @@ type Client struct {
 	baseURL url.URL
 
 	// credentials
-	clientSecret string
-	accessToken  string
+	businessID string
+	token      string
 
 	// User agent for client
 	userAgent string
@@ -95,22 +96,22 @@ func (c *Client) SetDebug(debug bool) {
 	c.debug = debug
 }
 
-func (c Client) ClientSecret() string {
-	return c.clientSecret
+func (c Client) BusinessID() string {
+	return c.businessID
 }
 
-func (c *Client) SetClientSecret(clientSecret string) {
-	c.clientSecret = clientSecret
+func (c *Client) SetBusinessID(businessID string) {
+	c.businessID = businessID
 }
 
-func (c Client) AccessToken() string {
-	return c.accessToken
+func (c Client) Token() string {
+	return c.token
 }
 
-func (c *Client) SetAccessToken(accessToken string) {
-	c.accessToken = accessToken
-	if requestTimestamps[accessToken] == nil {
-		requestTimestamps[accessToken] = &timestamps{}
+func (c *Client) SetToken(token string) {
+	c.token = token
+	if requestTimestamps[token] == nil {
+		requestTimestamps[token] = &timestamps{}
 	}
 }
 
@@ -150,9 +151,9 @@ func (c *Client) SetDisallowUnknownFields(disallowUnknownFields bool) {
 	c.disallowUnknownFields = disallowUnknownFields
 }
 
-func (c *Client) GetEndpointURL(path string, pathParams PathParams) url.URL {
+func (c *Client) GetEndpointURL(urlPath string, pathParams PathParams) url.URL {
 	clientURL := c.BaseURL()
-	clientURL.Path = clientURL.Path + path
+	clientURL.Path = path.Join(clientURL.Path, urlPath)
 
 	tmpl, err := template.New("endpoint_url").Parse(clientURL.Path)
 	if err != nil {
@@ -202,9 +203,9 @@ func (c *Client) NewRequest(ctx context.Context, method string, URL url.URL, bod
 	req.Header.Add("Accept", c.MediaType())
 	req.Header.Add("User-Agent", c.UserAgent())
 
-	if c.AccessToken() != "" && c.ClientSecret() != "" {
-		req.Header.Add("Client-Secret", c.ClientSecret())
-		req.Header.Add("Access-Token", c.AccessToken())
+	if c.Token() != "" && c.BusinessID() != "" {
+		req.Header.Add("X-Business-Units", c.BusinessID())
+		req.Header.Add("X-Token", c.Token())
 	}
 
 	return req, nil
@@ -284,12 +285,12 @@ func (c *Client) Do(req *http.Request, responseBody interface{}) (*http.Response
 }
 
 func (c *Client) RegisterRequestTimestamp(t time.Time) {
-	if len(*requestTimestamps[c.accessToken]) >= requestsPerSecond {
-		ts := (*requestTimestamps[c.accessToken])[1:requestsPerSecond]
-		requestTimestamps[c.accessToken] = &ts
+	if len(*requestTimestamps[c.token]) >= requestsPerSecond {
+		ts := (*requestTimestamps[c.token])[1:requestsPerSecond]
+		requestTimestamps[c.token] = &ts
 	}
-	ts := append(*requestTimestamps[c.accessToken], t)
-	requestTimestamps[c.accessToken] = &ts
+	ts := append(*requestTimestamps[c.token], t)
+	requestTimestamps[c.token] = &ts
 }
 
 func (c *Client) SleepUntilRequestRate() {
@@ -297,13 +298,13 @@ func (c *Client) SleepUntilRequestRate() {
 
 	// if there are less then 4 registered requests: execute the request
 	// immediately
-	if len(*requestTimestamps[c.accessToken]) < (requestsPerSecond - 1) {
+	if len(*requestTimestamps[c.token]) < (requestsPerSecond - 1) {
 		return
 	}
 
 	// is the first item within 1 second? If it's > 1 second the request can be
 	// executed imediately
-	diff := time.Now().Sub((*requestTimestamps[c.accessToken])[0])
+	diff := time.Now().Sub((*requestTimestamps[c.token])[0])
 	if diff >= time.Second {
 		return
 	}
@@ -322,10 +323,12 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	wg.Add(len(vv))
 	errs := []error{}
 	writers := make([]io.Writer, len(vv))
+	closers := make([]io.Closer, len(vv))
 
 	for i, v := range vv {
 		pr, pw := io.Pipe()
 		writers[i] = pw
+		closers[i] = pw
 
 		go func(i int, v interface{}, pr *io.PipeReader, pw *io.PipeWriter) {
 			dec := json.NewDecoder(pr)
@@ -333,6 +336,7 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 				dec.DisallowUnknownFields()
 			}
 
+			// start reading from pipe reader
 			err := dec.Decode(v)
 			if err != nil {
 				errs = append(errs, err)
@@ -351,13 +355,26 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	}
 
 	// copy the data in a multiwriter
+	// create a writer that copies its writes to each and every given writers
 	mw := io.MultiWriter(writers...)
+
+	// writer (dest) <- reader (src)
+	// io.CopyBuffer can also be used: uses smaller buffer
+	// from reader to multiwriter -> io.Pipe -> pipe writer -> reader for decode function
 	_, err := io.Copy(mw, r)
 	if err != nil {
 		return err
 	}
 
+	// reading is done: close all writers
+	for _, c := range closers {
+		err := c.Close()
+		errs = append(errs, err)
+	}
+
+	// wait for waitgroup
 	wg.Wait()
+
 	if len(errs) == len(vv) {
 		// Everything errored
 		msgs := make([]string, len(errs))

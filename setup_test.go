@@ -1,4 +1,4 @@
-package fortnox_test
+package gastrofix_test
 
 import (
 	"log"
@@ -6,12 +6,11 @@ import (
 	"os"
 	"testing"
 
-	fortnox "github.com/omniboost/go-gastrofix"
-	"golang.org/x/oauth2"
+	gastrofix "github.com/omniboost/go-gastrofix"
 )
 
 var (
-	client    *fortnox.Client
+	client    *gastrofix.Client
 	companyID int
 )
 
@@ -19,42 +18,14 @@ func TestMain(m *testing.M) {
 	baseURLString := os.Getenv("BASE_URL")
 
 	// old authenticatio
-	clientSecret := os.Getenv("CLIENT_SECRET")
-	accessToken := os.Getenv("ACCESS_TOKEN")
-
-	// new oauth2 authentication
-	clientID := os.Getenv("CLIENT_ID")
-	clientSecret = os.Getenv("CLIENT_SECRET")
-	refreshToken := os.Getenv("REFRESH_TOKEN")
-	tokenURL := os.Getenv("TOKEN_URL")
-
+	businessID := os.Getenv("BUSINESS_ID")
+	token := os.Getenv("TOKEN")
 	debug := os.Getenv("DEBUG")
 
-	oauthConfig := fortnox.NewOauth2Config()
-	oauthConfig.ClientID = clientID
-	oauthConfig.ClientSecret = clientSecret
-
-	if clientID != "" && clientSecret != "" && refreshToken != "" {
-		// setup oauth2 client
-
-		// set alternative token url
-		if tokenURL != "" {
-			oauthConfig.Endpoint.TokenURL = tokenURL
-		}
-
-		token := &oauth2.Token{
-			RefreshToken: refreshToken,
-		}
-
-		// get http client with automatic oauth logic
-		httpClient := oauthConfig.Client(oauth2.NoContext, token)
-		client = fortnox.NewClient(httpClient)
-	} else {
-		// setup old auth client
-		client = fortnox.NewClient(nil)
-		client.SetClientSecret(clientSecret)
-		client.SetAccessToken(accessToken)
-	}
+	// setup old auth client
+	client = gastrofix.NewClient(nil)
+	client.SetBusinessID(businessID)
+	client.SetToken(token)
 
 	if debug != "" {
 		client.SetDebug(true)

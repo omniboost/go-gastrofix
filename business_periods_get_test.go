@@ -1,4 +1,4 @@
-package fortnox_test
+package gastrofix_test
 
 import (
 	"encoding/json"
@@ -6,8 +6,8 @@ import (
 	"testing"
 )
 
-func TestGetCustomers(t *testing.T) {
-	req := client.NewGetCustomersRequest()
+func TestBusinessPeriodsGet(t *testing.T) {
+	req := client.NewBusinessPeriodsGetRequest()
 	resp, err := req.Do()
 	if err != nil {
 		t.Error(err)

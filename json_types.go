@@ -1,4 +1,4 @@
-package fortnox
+package gastrofix
 
 import (
 	"encoding/json"
