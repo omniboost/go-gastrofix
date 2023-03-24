@@ -369,10 +369,13 @@ func (c *Client) Unmarshal(r io.Reader, vv ...interface{}) error {
 	// reading is done: close all writers
 	for _, c := range closers {
 		err := c.Close()
-		errs = append(errs, err)
+		if err != nil {
+			errs = append(errs, err)
+		}
 	}
 
 	// wait for waitgroup
+	// @TODO: check if necessary
 	wg.Wait()
 
 	if len(errs) == len(vv) {

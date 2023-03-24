@@ -3,7 +3,6 @@ package gastrofix
 import (
 	"net/http"
 	"net/url"
-	"time"
 
 	"github.com/omniboost/go-gastrofix/utils"
 )
@@ -97,12 +96,7 @@ func (r *BusinessPeriodsGetRequest) NewResponseBody() *BusinessPeriodsGetRespons
 }
 
 type BusinessPeriodsGetResponseBody struct {
-	BusinessPeriods []struct {
-		BusinessDay           string    `json:"businessDay"`
-		PeriodID              int       `json:"periodId"`
-		StartPeriodTimestamp  time.Time `json:"startPeriodTimestamp"`
-		FinishPeriodTimestamp time.Time `json:"finishPeriodTimestamp"`
-	} `json:"businessPeriods"`
+	BusinessPeriods BusinessPeriods `json:"businessPeriods"`
 }
 
 func (r *BusinessPeriodsGetRequest) URL() url.URL {
