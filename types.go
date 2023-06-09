@@ -43,8 +43,13 @@ type Transaction struct {
 			TipForeignCurrencyAmount   int64 `json:"tipForeignCurrencyAmount"`
 			TipSubTotal                int64 `json:"tipSubTotal"`
 			Units                      int64 `json:"units"`
+			NewAmount                  int64 `json:"newamount"`
+			PreviousAmount             int64 `json:"previousAmount"`
+			AppliedAmount              int64 `json:"appliedAmount"`
+			AppliedPercent             int64 `json:"appliedPercent"`
 		} `json:"amounts"`
 		Extras struct {
+			AssociatedLineItemSequenceNumber int64 `json:"associatedLineItemSequenceNumber"`
 			AppVersion              string      `json:"appVersion"`
 			AttachmentSubTypeCode   interface{} `json:"attachmentSubTypeCode"`
 			AttachmentTypeCode      string      `json:"attachmentTypeCode"`
@@ -63,7 +68,7 @@ type Transaction struct {
 			CardTerminalReferenceID interface{} `json:"cardTerminalReferenceId"`
 			CardType                interface{} `json:"cardType"`
 			CardVerificationMethod  interface{} `json:"cardVerificationMethod"`
-			ClosingBalances         struct {
+			ClosingBalances                  struct {
 				One12 []struct {
 					Amount             int64  `json:"amount"`
 					BaseCurrencyAmount int64  `json:"baseCurrencyAmount"`
@@ -138,6 +143,7 @@ type Transaction struct {
 				SecureElements interface{} `json:"secureElements"`
 				Slaves         interface{} `json:"slaves"`
 			} `json:"devices"`
+			DiscountName                     string `json:"discountName"`
 			DivisionName             string      `json:"divisionName"`
 			GroupName                string      `json:"groupName"`
 			HotelGuestName           string      `json:"hotelGuestName"`
@@ -237,6 +243,7 @@ type Transaction struct {
 					UntaxedVoucherAmount int64  `json:"untaxedVoucherAmount"`
 				} `json:"total"`
 			} `json:"payments"`
+			PreviousLineItemSequenceNumber   string `json:"previousLineItemSequenceNumber"`
 			PriceEntryMethod   string      `json:"priceEntryMethod"`
 			PriceLevelName     interface{} `json:"priceLevelName"`
 			ReasonCategoryCode interface{} `json:"reasonCategoryCode"`
