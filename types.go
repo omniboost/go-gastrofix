@@ -49,25 +49,25 @@ type Transaction struct {
 			AppliedPercent             int64 `json:"appliedPercent"`
 		} `json:"amounts"`
 		Extras struct {
-			AssociatedLineItemSequenceNumber int64 `json:"associatedLineItemSequenceNumber"`
-			AppVersion              string      `json:"appVersion"`
-			AttachmentSubTypeCode   interface{} `json:"attachmentSubTypeCode"`
-			AttachmentTypeCode      string      `json:"attachmentTypeCode"`
-			Blob                    string      `json:"blob"`
-			BusinessCases           interface{} `json:"businessCases"`
-			CardAcquirerReferenceID interface{} `json:"cardAcquirerReferenceId"`
-			CardApplicationID       interface{} `json:"cardApplicationId"`
-			CardAuthorizationCode   interface{} `json:"cardAuthorizationCode"`
-			CardEntryMethodCode     interface{} `json:"cardEntryMethodCode"`
-			CardExpiryDate          interface{} `json:"cardExpiryDate"`
-			CardFingerPrint         interface{} `json:"cardFingerPrint"`
-			CardHolderName          interface{} `json:"cardHolderName"`
-			CardLastFour            interface{} `json:"cardLastFour"`
-			CardMerchantID          interface{} `json:"cardMerchantId"`
-			CardTerminalID          interface{} `json:"cardTerminalId"`
-			CardTerminalReferenceID interface{} `json:"cardTerminalReferenceId"`
-			CardType                interface{} `json:"cardType"`
-			CardVerificationMethod  interface{} `json:"cardVerificationMethod"`
+			AssociatedLineItemSequenceNumber int64       `json:"associatedLineItemSequenceNumber"`
+			AppVersion                       string      `json:"appVersion"`
+			AttachmentSubTypeCode            interface{} `json:"attachmentSubTypeCode"`
+			AttachmentTypeCode               string      `json:"attachmentTypeCode"`
+			Blob                             string      `json:"blob"`
+			BusinessCases                    interface{} `json:"businessCases"`
+			CardAcquirerReferenceID          interface{} `json:"cardAcquirerReferenceId"`
+			CardApplicationID                interface{} `json:"cardApplicationId"`
+			CardAuthorizationCode            interface{} `json:"cardAuthorizationCode"`
+			CardEntryMethodCode              interface{} `json:"cardEntryMethodCode"`
+			CardExpiryDate                   interface{} `json:"cardExpiryDate"`
+			CardFingerPrint                  interface{} `json:"cardFingerPrint"`
+			CardHolderName                   interface{} `json:"cardHolderName"`
+			CardLastFour                     interface{} `json:"cardLastFour"`
+			CardMerchantID                   interface{} `json:"cardMerchantId"`
+			CardTerminalID                   interface{} `json:"cardTerminalId"`
+			CardTerminalReferenceID          interface{} `json:"cardTerminalReferenceId"`
+			CardType                         interface{} `json:"cardType"`
+			CardVerificationMethod           interface{} `json:"cardVerificationMethod"`
 			ClosingBalances                  struct {
 				One12 []struct {
 					Amount             int64  `json:"amount"`
@@ -143,20 +143,21 @@ type Transaction struct {
 				SecureElements interface{} `json:"secureElements"`
 				Slaves         interface{} `json:"slaves"`
 			} `json:"devices"`
-			DiscountName                     string `json:"discountName"`
-			DivisionName             string      `json:"divisionName"`
-			GroupName                string      `json:"groupName"`
-			HotelGuestName           string      `json:"hotelGuestName"`
-			HotelPaymentProviderCode string      `json:"hotelPaymentProviderCode"`
-			HotelReservationID       string      `json:"hotelReservationId"`
-			HotelRoomID              string      `json:"hotelRoomId"`
-			HotelRoomName            string      `json:"hotelRoomName"`
-			ItemBarcode              interface{} `json:"itemBarcode"`
-			ItemEntryMethod          string      `json:"itemEntryMethod"`
-			ItemKind                 int64       `json:"itemKind"`
-			ItemName                 string      `json:"itemName"`
-			ItemShortName            string      `json:"itemShortName"`
-			Location                 struct {
+			DiscountName               string      `json:"discountName"`
+			DivisionName               string      `json:"divisionName"`
+			FromLineItemSequenceNumber int         `json:"fromLineItemSequenceNumber"`
+			GroupName                  string      `json:"groupName"`
+			HotelGuestName             string      `json:"hotelGuestName"`
+			HotelPaymentProviderCode   string      `json:"hotelPaymentProviderCode"`
+			HotelReservationID         string      `json:"hotelReservationId"`
+			HotelRoomID                string      `json:"hotelRoomId"`
+			HotelRoomName              string      `json:"hotelRoomName"`
+			ItemBarcode                interface{} `json:"itemBarcode"`
+			ItemEntryMethod            string      `json:"itemEntryMethod"`
+			ItemKind                   int64       `json:"itemKind"`
+			ItemName                   string      `json:"itemName"`
+			ItemShortName              string      `json:"itemShortName"`
+			Location                   struct {
 				BaseCurrency string      `json:"baseCurrency"`
 				City         interface{} `json:"city"`
 				CountryCode  interface{} `json:"countryCode"`
@@ -243,12 +244,12 @@ type Transaction struct {
 					UntaxedVoucherAmount int64  `json:"untaxedVoucherAmount"`
 				} `json:"total"`
 			} `json:"payments"`
-			PreviousLineItemSequenceNumber   string `json:"previousLineItemSequenceNumber"`
-			PriceEntryMethod   string      `json:"priceEntryMethod"`
-			PriceLevelName     interface{} `json:"priceLevelName"`
-			ReasonCategoryCode interface{} `json:"reasonCategoryCode"`
-			ReasonName         interface{} `json:"reasonName"`
-			ResetBalances      struct {
+			PreviousLineItemSequenceNumber string      `json:"previousLineItemSequenceNumber"`
+			PriceEntryMethod               string      `json:"priceEntryMethod"`
+			PriceLevelName                 interface{} `json:"priceLevelName"`
+			ReasonCategoryCode             interface{} `json:"reasonCategoryCode"`
+			ReasonName                     interface{} `json:"reasonName"`
+			ResetBalances                  struct {
 				One12 []struct {
 					Amount             int64  `json:"amount"`
 					BaseCurrencyAmount int64  `json:"baseCurrencyAmount"`
@@ -282,7 +283,8 @@ type Transaction struct {
 					TypeCode           string `json:"typeCode"`
 				} `json:"total"`
 			} `json:"resetBalances"`
-			SalesSummaries struct {
+			ReferencedTrUuid string `json:"referencedTrUuid"`
+			SalesSummaries   struct {
 				Divisions []struct {
 					DiscountAmount           int64  `json:"discountAmount"`
 					DiscountTransactionCount int64  `json:"discountTransactionCount"`
@@ -372,6 +374,8 @@ type Transaction struct {
 			TaxedLineItemSequenceNumber      int64       `json:"taxedLineItemSequenceNumber"`
 			TenderName                       string      `json:"tenderName"`
 			TenderTypeCode                   string      `json:"tenderTypeCode"`
+			ToLineItemSequenceNumber         int         `json:"toLineItemSequenceNumber"`
+			TransferTypeCode                 string      `json:"transferTypeCode"`
 			TriggeringLineItemSequenceNumber int64       `json:"triggeringLineItemSequenceNumber"`
 			UnitName                         interface{} `json:"unitName"`
 			Vats                             []struct {
